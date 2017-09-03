@@ -10,11 +10,23 @@ socket.on('disconnect', function () {
 
 socket.on('newMessage', function (message) {
     console.log('newMessage', message);
-    var wrap = document.getElementById('messages');
-    var messageElm = document.createElement('li');
-    var text = document.createTextNode(message.from+': '+message.text); 
-    messageElm.appendChild(text);
-    wrap.appendChild(messageElm);
+
+    var template = document.getElementById('message-template').innerHTML;
+    var html = Mustache.render(template, {
+        text: message.text,
+        from: message.from,
+        createdAt: message.createdAt
+    });
+    // var elmNode = 
+    var child = document.createElement('article');
+    child.setAttribute("class", "media");
+    child.innerHTML = html;
+    document.getElementById('messages').appendChild(child);
+    // var wrap = document.getElementById('messages');
+    // var messageElm = document.createElement('li');
+    // var text = document.createTextNode(message.from+': '+message.text); 
+    // messageElm.appendChild(text);
+    // wrap.appendChild(messageElm);
 });
 
 document.getElementById('message-form').addEventListener('submit',function (e) {
