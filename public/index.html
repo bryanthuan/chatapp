@@ -8,6 +8,12 @@
 </head>
 <body>
     <h1>Welcome to node chat app</h1>
+    <ol id="messages">
+    </ol>
+    <form method="get" id="message-form">
+        <input type="text" name="" placeholder="Type message" id="messageInput">
+        <button id="sendBtn">Send</button>
+    </form>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/index.js"></script>
 </body>
