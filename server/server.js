@@ -41,10 +41,13 @@ io.on('connection', socket => {
 
     // Event Listenner 
     socket.on('createMessage', (message, callback) => {
-        console.log('createMessage', message);
+        // console.log('createMessage', message);
         const { from, text, createdAt } = message;
-        io.emit('newMessage',generateMessage(from, text));
-        callback('This is from the server');
+        const user = users.getUser(socket.id);
+        if (user && isRealString(text)) {
+            io.to(user.room).emit('newMessage', generateMessage(user.name, text));
+        }
+        callback();
     });
     
     socket.on('disconnect', () => {

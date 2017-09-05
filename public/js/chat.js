@@ -58,7 +58,6 @@ document.getElementById('message-form').addEventListener('submit',function (e) {
     e.preventDefault();
     var text = document.getElementById('messageInput').value;
     socket.emit('createMessage', {
-        from: 'User',
         text
     }, function () {
         document.getElementById('messageInput').value = '';
