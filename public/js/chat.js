@@ -1,12 +1,43 @@
 const socket = io();
 
 socket.on('connect', function () {
-    console.log('Connected to server');
+
+    var url = new URL(window.location.href);
+    var name = url.searchParams.get("name");
+    var room = url.searchParams.get("room");
+    
+    socket.emit('join', {name, room}, function (err) {
+        if (err) {
+            window.location.href = '/';
+        } else {
+
+        }
+    });
 });
 
 socket.on('disconnect', function () {
     console.log('Disconnected from server');
 });
+
+
+socket.on('updateUserList', users => {
+    console.log('User List', users);
+    const userList =document.getElementById('user-list');
+    userList.innerHTML = '';
+    users.forEach(function(element) {
+        // let child = document.createElement('a');
+        // let text = document.createTextNode(element);
+        // child.innerText = text;
+        // userList.appendChild(text)
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        var name = document.createTextNode(element);
+        a.appendChild(name);
+        li.appendChild(a);
+        userList.appendChild(li);
+    }, this);
+    
+})
 
 socket.on('newMessage', function (message) {
     console.log('newMessage', message);
@@ -17,16 +48,10 @@ socket.on('newMessage', function (message) {
         from: message.from,
         createdAt: message.createdAt
     });
-    // var elmNode = 
     var child = document.createElement('article');
     child.setAttribute("class", "media");
     child.innerHTML = html;
     document.getElementById('messages').appendChild(child);
-    // var wrap = document.getElementById('messages');
-    // var messageElm = document.createElement('li');
-    // var text = document.createTextNode(message.from+': '+message.text); 
-    // messageElm.appendChild(text);
-    // wrap.appendChild(messageElm);
 });
 
 document.getElementById('message-form').addEventListener('submit',function (e) {
